@@ -1,3 +1,3 @@
 # trainings
 
-* [./shell-commands/README.sh](./shell-commands/README.sh)
+* [./shell-commands/README.md](./shell-commands/README.md)
