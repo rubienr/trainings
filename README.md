@@ -1,2 +1,3 @@
 # trainings
-Personal Widespread Training Material
+
+* [./shell-commands/README.sh](./shell-commands/README.sh)
