@@ -1,7 +1,7 @@
 # Table of Contents
-*[Shell Commands - A Swiss Army Knife](#Shell-Commands---A-Swiss-Army-Knife)
-  *[Introduction](#Introduction)
-  *[Commands - Tooling](#Commands---Tooling)
+* [Shell Commands - A Swiss Army Knife](#Shell-Commands---A-Swiss-Army-Knife)
+  * [Introduction](#Introduction)
+  * [Commands - Tooling](#Commands---Tooling)
    *[bash, alias, pipe, stream](#bash-alias-pipe-stream)
    *[reverse interactive search](#reverse-interactive-search)
  *[as you type, the command history is searched interactively](#as-you-type-the-command-history-is-searched-interactively)
