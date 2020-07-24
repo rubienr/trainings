@@ -1,6 +1,7 @@
 *document heavily under construction*
 
-# Table of Contents  * [Shell Commands - A Swiss Army Knife](#Shell-Commands---A-Swiss-Army-Knife)
+# Table of Contents
+  * [Shell Commands - A Swiss Army Knife](#Shell-Commands---A-Swiss-Army-Knife)
     * [Introduction](#Introduction)
     * [Commands - Tooling](#Commands---Tooling)
       * [bash, alias, pipe, stream](#bash-alias-pipe-stream)
