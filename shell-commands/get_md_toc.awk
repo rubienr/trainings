@@ -6,7 +6,7 @@ BEGIN {
     if ($1 ~ /#/) 
     {
      indentation=$1
-     gsub(/#/, " ", indentation)
+     gsub(/#/, "  ", indentation)
                
      title=$0
      sub(/#* /, "", title)
