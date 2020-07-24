@@ -14,7 +14,7 @@ BEGIN {
      link=title
      gsub(/ /, "-", link)
      gsub(/[\(\]\{\}\),\/\\]/, "", link)
-     print indentation "*[" title "](#" link ")"
+     print indentation "* [" title "](#" link ")"
     }
 }
 
