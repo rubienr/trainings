@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "crating table of contents ..."
-echo "# Table of Contents" >  README.md
-awk --file get_md_toc.awk body.md >> README.md
+echo -en "*document heavily under construction*\n# Table of Contents" >  README.md
+awk --file get_md_toc.awk content.md >> README.md
 echo "---"  >> README.md
 echo "adding content ..."
-cat body.md >> README.md
+cat content.md >> README.md
 echo "done"
