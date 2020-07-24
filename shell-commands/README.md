@@ -67,7 +67,7 @@
       * [dirs, pushd, popd](#dirs-pushd-popd)
         * [dirs - list stack](#dirs---list-stack)
         * [pushd - change to directory, and store it to stack](#pushd---change-to-directory-and-store-it-to-stack)
-        * [popd - change to directory stored on top of stack, and remove from stack !MACRO](#popd---change-to-directory-stored-on-top-of-stack-and-remove-from-stack-!MACRO)
+        * [popd - change to directory stored on top of stack, and remove from stack !MACRO](#popd---change-to-directory-stored-on-top-of-stack-and-remove-from-stack-MACRO)
       * [wget - the non-interactive network downloader](#wget---the-non-interactive-network-downloader)
       * [rsync, scp](#rsync-scp)
         * [rsync - a fast, versatile, remote (and local) file-copying tool](#rsync---a-fast-versatile-remote-and-local-file-copying-tool)
