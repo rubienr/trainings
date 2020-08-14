@@ -1,0 +1,6 @@
+what    shape    color  family
+apple   round    yellow fruit
+cabbage roundish green  vegetable
+apple   round    yellow fruit
+tomato  round    red    fruit
+cucumber longish green  vegetable
