@@ -9,8 +9,9 @@ In this session we will focus on a simple script and look in detail onto:
 * shebang `#!`
 * debugging with script trace
 * get the script name and script directory
-* returning to the script path
 * variables
+* redirecting output
+* changing directories and returning to the script path
 * functions and a simple `if` clause
 
 In the end of the session we will obtain a fully working example.
@@ -71,7 +72,7 @@ To pack multiple words to one argument use `""` or `''`.
     FOO: bar
     
     echo 'FOO: $FOO'         # with '' will not evaluate variables
-    FOO:
+    FOO: $FOO
   
     echo "FOOBAR: ${FOO}bar" # when ambiguous 
     FOOBAR: foobar
