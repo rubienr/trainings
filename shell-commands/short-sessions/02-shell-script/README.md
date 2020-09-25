@@ -1,4 +1,4 @@
-# Schell commands - Shell Script 101
+# Shell commands - Shell Script 101
 
 In this session I will show how to create a simple shell script.
 Of course many ways exist on how to do it - this is just one of many approaches.
@@ -7,8 +7,11 @@ No special skills are needed, neither sophisticated shell commands will be used.
 In this session we will focus on a simple script and look in detail onto:
 
 * shebang `#!`
+* debugging with script trace
 * get the script name and script directory
-* working in the correct path
+* returning to the script path
+* variables
+* functions and a simple `if` clause
 
 In the end of the session we will obtain a fully working example.
 
@@ -81,7 +84,14 @@ To pack multiple words to one argument use `""` or `''`.
 
         VAR="foo"                # global
         local var="bar"          # to be used in a function `{}` scope
-    
+
+### enable/disable debugging/trace of script
+
+        set -x                     # enable trace
+        set xtrace
+
+        set +x                     # disable trace
+
 ### Define a Funcion
 
 Function parameter are optional and passed as string. 
@@ -134,24 +144,54 @@ or alternatively
 
 ### Get the output of evaluated command
 
-        files=`ls`                   # ancient style, but very convenient to write
-        files=$(ls)                  # bash specific, expressions can be nested
-        echo "files: $files"
-        README.md script.sh        
-
-### enable/disable debugging/trace of script
-
-        set -x                     # enable trace
-        set xtrace
-
-        set +x                     # disable trace
+    files=`ls`                   # ancient style, but very convenient to write
+    files=$(ls)                  # bash specific, expressions can be nested
+    echo "files: $files"
+    README.md script.sh        
       
+### Redirect output of a command
+Sometimes it is needed to run a command, but we don't wnat to see any output.
+In such cases we can send the `stdout` to a file or even `/dev/null`.
+If the command's 'output goes to `stderr` this also needs to be forwarded separately. 
+
+Stdout is referred as file descriptor 1 and stderr as 2. 
+With this we can redirect the output as follows
+
+    command > out.txt           # execute command and forward stdout to a file
+    command 1> out.txt          # same as above but more explicit
+    command 2> out.txt          # same as above but forward stderr only
+    command > out.txt 2>&1      execute command, for ward stdout to file and forward stderr to stdout
+
+Example:
+    
+    touch foo                     # create an empty file
+    ls foo                                                                                                                                                                                                                                                      
+    foo              
+
+    ls foo > /dev/null 
+
+    ls doesnotexist               # this file does not exist, ls prints to stderr 
+    ls: cannot access doesnotexist: No such file or directory
+
+    ls doesnotexist > /dev/null                                                                                                                                                                                                                        
+    ls: cannot access doesnotexist: No such file or directory 
+
+    ls doesnotexist 2> /dev/null  # forwards stderr to file
+    ls doesnotexist > /dev/null 2>&1 # forwards stderr and also redirects stderr to stdout
+
+
 ### touch - change file timestamp
 
-    Update the access and modification times of a file to the current time.
-    If the file does not exist is is created empty.
+`touch` updates the access and modification times of a file to the current time.
+If the file does not exist is is created empty.
 
-## Create the script
+    ls foo
+    ls: cannot access foo: No such file or directory
+    touch foo
+    ls foo
+    foo
+
+## Create a script
 
 Creating a script is nearly as simple as creating an empty file. 
 Usually we choose the `.sh` but the file extension is optional.
@@ -159,22 +199,23 @@ The only thing we have to specify, is the intepreter the shell should use when e
 
 Create a script file, make it exectable and specify the interpreter:
     
-    $ touch script.sh
-    $ echo '#!/usr/bin/env bash' > script.sh
-    $ chmod u+x script.sh
-    $ cat script.sh
+    touch script.sh
+    echo '#!/usr/bin/env bash' > script.sh
+    chmod u+x script.sh
+    cat script.sh
     #!/bin/bash
-    $ ./script.sh
+    
+    ./script.sh
 
 
-## Obtain the script name and path
+### Obtain the script name and path
 In almost every script it is helpful to kwow the script name and it's location.
 I recomment to use this as the very first lines in each script.
 
     SCRIPT_NAME=`basename ${BASH_SOURCE[0]}`
     SCRIPT_PATH=`dirname ${BASH_SOURCE[0]}`
 
-## Source other scripts
+### Source other scripts
 Sourcing means including other scrpts. 
 While sourcing the whole script is executed. 
 
@@ -189,7 +230,7 @@ Thus we can write:
     (return 0 2>/dev/null) && SOURCE="1" || EXECUTE="1"
     
 
-## Example
+## Full Example
 
 In this example we put all puzzles together and obtain a nice script
 that can (python alike) be executed or used as "library".
