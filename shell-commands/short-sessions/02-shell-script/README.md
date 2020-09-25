@@ -29,71 +29,73 @@ In our case we say: bash if you execte this file use `bash` as interpreter.
     #!/usr/bin/env bash      # modern way
     #!/usr/bin/bash          # ancient method
 
-### Script arguments are passed by string and can be accessd with `$N` where N denotes the index.
+### Script arguments
+
+Arguments are passed by string and can be accessed with `$N` where N denotes the index.
 The first argument is the name of the executable. 
 Each argument is interpreted as separated by space (as word).
 To pack multiple words to one argument use `""` or `''`.
 
-    echo "$0"                # print the 1st argument of this shell
+    $ echo "$0"                # print the 1st argument of this shell
     /bin/bash
     
 * Alternative: `$0` vs. `${BASH_SOURCE[0]}`
 
     Script:
     
-        #!/bin/bash
-        echo "[$0] vs. [${BASH_SOURCE[0]}]"
+    #!/bin/bash
+    echo "[$0] vs. [${BASH_SOURCE[0]}]"
 
     Result:
     
-        $ bash ./foo.sh
-        [./foo.sh] vs. [./foo.sh]
+    $ bash ./foo.sh
+    [./foo.sh] vs. [./foo.sh]
 
-        $ ./foo.sh
-        [./foo.sh] vs. [./foo.sh]
+    $ ./foo.sh
+    [./foo.sh] vs. [./foo.sh]
 
-        $ . ./foo.sh
-        [bash.sh] vs. [./foo.sh]
-        
-        echo "[$0] vs. [${BASH_SOURCE[0]}]"
-        [/bin/bash] vs. []            
+    $ . ./foo.sh
+    [bash.sh] vs. [./foo.sh]
+
+    $ echo "[$0] vs. [${BASH_SOURCE[0]}]"
+    [/bin/bash] vs. []
 
 ### Variable assignment (in bash almost everything is a string)
 
     FOO=foo
-    BAR="bar"                # use quotes whenever possible
+    BAR="bar"                    # use quotes whenever possible
     BAZ="$BAR"
-    BIZ= "biz"               # wrong: no space is allowed 
-    BIZ ="biz"               # wrong: no space is allowed 
+    BIZ= "biz"                   # wrong: no space is allowed
+    BIZ ="biz"                   # wrong: no space is allowed
     
 ### Access variable
 
-    echo "FOO: $FOO"
+    $ echo "FOO: $FOO"
     FOO: bar
-    
-    echo 'FOO: $FOO'         # with '' will not evaluate variables
+
+    $ echo 'FOO: $FOO'           # with '' will not evaluate variables
     FOO: $FOO
-  
-    echo "FOOBAR: ${FOO}bar" # when ambiguous 
+
+    $ echo "FOOBAR: ${FOO}bar"   # when ambiguous
     FOOBAR: foobar
-    
-    echo "FOOBAR: $FOObar"   # wrong
+
+    $ echo "FOOBAR: $FOObar"     # wrong
     FOOBAR: 
       
     
 ### Variable scope is global by default. Use `local` to minimize the scope.
 
-        VAR="foo"                # global
-        local var="bar"          # to be used in a function `{}` scope
+    VAR="foo"                    # global
+    local var="bar"              # to be used in a function `{}` scope
 
 ### enable/disable debugging/trace of script
 
-        set -x                     # enable trace
-        set xtrace
+    set -x                       # enable trace
+    set xtrace
 
-        set +x                     # disable trace
+    set +x                       # disable trace
 
-### Define a Funcion
+### Define a Function
 
 Function parameter are optional and passed as string. 
 To define a function properly it is recommended to
@@ -110,6 +112,7 @@ Example:
     # $2 ... right string
     function func_concatenate() 
     {
+        # $0 is still the script name
         local left="$1"
         local right="$2"
         echo "${left}${right}"
@@ -117,7 +120,7 @@ Example:
 
 Call a function:
 
-        func_concatenate "a b" cd
+    $ func_concatenate "a b" cd
     
 ### `if` clauses
 
@@ -138,58 +141,61 @@ For a simpler reading the expression is can be executed with `test` which is wri
     
 or alternatively 
     
-    if [ -z "" ] ; then         # if string is empty
-                                # note `[` is equally to `test` and `[` is just an input argument
-        expr2
-    fi
+if [ -z "" ] ; then              # if string is empty
+                                 # note [ is equally to test and ] is just a further input argument
+                                 # thus all spaces are mandatory in between if and ]
+    expr2
+fi
 
 ### Get the output of evaluated command
 
-    files=`ls`                   # ancient style, but very convenient to write
-    files=$(ls)                  # bash specific, expressions can be nested
-    echo "files: $files"
+    $ files=`ls`                 # ancient style, but very convenient to write
+    $ files=$(ls)                # bash specific, expressions can be nested
+
+    $ echo "files: $files"
     README.md script.sh        
       
 ### Redirect output of a command
+
 Sometimes it is needed to run a command, but we don't wnat to see any output.
 In such cases we can send the `stdout` to a file or even `/dev/null`.
 If the command's 'output goes to `stderr` this also needs to be forwarded separately. 
-
 Stdout is referred as file descriptor 1 and stderr as 2. 
-With this we can redirect the output as follows
+With this we can redirect the output as follows:
 
-    command > out.txt           # execute command and forward stdout to a file
-    command 1> out.txt          # same as above but more explicit
-    command 2> out.txt          # same as above but forward stderr only
-    command > out.txt 2>&1      execute command, for ward stdout to file and forward stderr to stdout
+    command > out.txt            # execute command and forward stdout to a file
+    command 1> out.txt           # same as above but more explicit
+    command 2> out.txt           # same as above but forward stderr only
+    command > out.txt 2>&1       # execute command, for ward stdout to file and forward stderr to stdout
 
 Example:
     
-    touch foo                     # create an empty file
-    ls foo                                                                                                                                                                                                                                                      
-    foo              
+    $ touch foo                  # create an empty file
+    $ ls foo
+    foo
 
-    ls foo > /dev/null 
+    $ ls foo > /dev/null
 
-    ls doesnotexist               # this file does not exist, ls prints to stderr 
+    $ ls doesnotexist            # this file does not exist, ls prints to stderr
     ls: cannot access doesnotexist: No such file or directory
 
-    ls doesnotexist > /dev/null                                                                                                                                                                                                                        
+    $ ls doesnotexist > /dev/null
     ls: cannot access doesnotexist: No such file or directory 
 
-    ls doesnotexist 2> /dev/null  # forwards stderr to file
-    ls doesnotexist > /dev/null 2>&1 # forwards stderr and also redirects stderr to stdout
+    $ ls doesnotexist 2> /dev/null     # forwards stderr to file
+    $ ls doesnotexist > /dev/null 2>&1 # forwards stderr and also redirects stderr to stdout
 
 
-### touch - change file timestamp
+### touch - change file time stamp
 
 `touch` updates the access and modification times of a file to the current time.
 If the file does not exist is is created empty.
 
-    ls foo
+    $ ls foo
     ls: cannot access foo: No such file or directory
-    touch foo
-    ls foo
+
+    $ touch foo
+    $ ls foo
     foo
 
 ## Create a script
@@ -198,15 +204,15 @@ Creating a script is nearly as simple as creating an empty file.
 Usually we choose the `.sh` but the file extension is optional.
 The only thing we have to specify, is the intepreter the shell should use when executing the content.
 
-Create a script file, make it exectable and specify the interpreter:
-    
-    touch script.sh
-    echo '#!/usr/bin/env bash' > script.sh
-    chmod u+x script.sh
-    cat script.sh
+Create a script file, make it executable and specify the interpreter:
+
+    $ touch script.sh
+    $ echo '#!/usr/bin/env bash' > script.sh
+    $ chmod u+x script.sh
+    $ cat script.sh
     #!/bin/bash
-    
-    ./script.sh
+
+    $ ./script.sh
 
 
 ### Obtain the script name and path
@@ -217,15 +223,14 @@ I recomment to use this as the very first lines in each script.
     SCRIPT_PATH=`dirname ${BASH_SOURCE[0]}`
 
 ### Source other scripts
-Sourcing means including other scrpts. 
+Sourcing means including other scripts.
 While sourcing the whole script is executed. 
 
-    source foo.sh
-    # or alternatively
-    . foo.sh
+    $ source foo.sh
+    $ . foo.sh                   # alternative to source
 
 To find out if the current script is sourced or executed we can use a bash specific hack. 
-Bash only allows return statements from functions and on top-level only if the scipt was sourced.
+Bash only allows return statements from functions and on top-level only if the script was sourced.
 Thus we can write:
 
     (return 0 2>/dev/null) && SOURCE="1" || EXECUTE="1"
@@ -306,17 +311,19 @@ that can (python alike) be executed or used as "library".
 
 Usage:
 
-    ./script.sh
+    $ ./script.sh
 
-    ./script.sh  a bcd x
+    $ ./script.sh  a bcd x
     abcd
 
-    ./script.sh  "a bcd" x
+    $./script.sh  "a bcd" x
     a bcdx
 
-    . script.sh 
+    $. script.sh
     New defined functions are:
       func_concatenate
       func_foo
       func_bar
 
+    $ func_foo
+    foo
